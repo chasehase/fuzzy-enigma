@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Word Family Explorer: technique, technician, technical &amp; technically</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-alt: #f1f5f9;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --primary: #2563eb;
+      --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
+
+      /* Part of speech color coding */
+      --adj-bg: #eef2ff;
+      --adj-border: #c7d2fe;
+      --adj-text: #3730a3;
+      --adj-accent: #4f46e5;
+
+      --noun-tech-bg: #ecfdf5;
+      --noun-tech-border: #a7f3d0;
+      --noun-tech-text: #065f46;
+      --noun-tech-accent: #059669;
+
+      --noun-person-bg: #fffbeb;
+      --noun-person-border: #fde68a;
+      --noun-person-text: #92400e;
+      --noun-person-accent: #d97706;
+
+      --adv-bg: #faf5ff;
+      --adv-border: #e9d5ff;
+      --adv-text: #6b21a8;
+      --adv-accent: #9333ea;
+
+      --greek-bg: #f0f9ff;
+      --greek-border: #bae6fd;
+      --greek-text: #075985;
+      --greek-accent: #0284c7;
+
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "PingFang HK", "Microsoft JhengHei", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding-bottom: 4rem;
+    }
+
+    /* Header & Sticky Controls */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .brand-badge {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    /* Recall Mode Toggle */
+    .recall-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .recall-toggle:hover {
+      border-color: var(--primary);
+    }
+
+    .recall-toggle.active {
+      background: #1e293b;
+      color: #ffffff;
+      border-color: #1e293b;
+    }
+
+    .toggle-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #94a3b8;
+      transition: background 0.2s;
+    }
+
+    .recall-toggle.active .toggle-dot {
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+
+    /* Section Navigation */
+    nav.section-nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0.5rem 1.25rem;
+      display: flex;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.42rem 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--surface-alt);
+      color: var(--text);
+    }
+
+    .nav-btn.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary-border);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 960px;
+      margin: 1.75rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* Recall Mode Blur / Reveal Mechanism */
+    body.recall-mode .recall-target {
+      position: relative;
+      background: #e2e8f0 !important;
+      color: transparent !important;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      padding: 0.1rem 0.4rem;
+    }
+
+    body.recall-mode .recall-target * {
+      color: transparent !important;
+    }
+
+    body.recall-mode .recall-target::after {
+      content: "Click to reveal";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #334155;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    body.recall-mode .recall-target.revealed {
+      background: #fef9c3 !important;
+      color: var(--text) !important;
+    }
+
+    body.recall-mode .recall-target.revealed * {
+      color: inherit !important;
+    }
+
+    body.recall-mode .recall-target.revealed::after {
+      display: none;
+    }
+
+    /* Hero / Intro Card */
+    .hero-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+      border: 1px solid var(--greek-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.75rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-card h1 {
+      font-size: 1.55rem;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+    }
+
+    .hero-card p {
+      color: var(--text-muted);
+      margin-bottom: 0.65rem;
+      font-size: 1.02rem;
+    }
+
+    .hero-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Section Cards */
+    .lesson-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      scroll-margin-top: 115px;
+    }
+
+    .lesson-section.hidden-by-filter {
+      display: none;
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      border-bottom: 2px solid var(--surface-alt);
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .pos-pill {
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+    }
+
+    .pill-greek { background: var(--greek-bg); color: var(--greek-text); border: 1px solid var(--greek-border); }
+    .pill-adj { background: var(--adj-bg); color: var(--adj-text); border: 1px solid var(--adj-border); }
+    .pill-noun-tech { background: var(--noun-tech-bg); color: var(--noun-tech-text); border: 1px solid var(--noun-tech-border); }
+    .pill-noun-person { background: var(--noun-person-bg); color: var(--noun-person-text); border: 1px solid var(--noun-person-border); }
+    .pill-adv { background: var(--adv-bg); color: var(--adv-text); border: 1px solid var(--adv-border); }
+
+    /* Interactive Timeline / Stepper for Section 1 */
+    .timeline-tabs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.65rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .step-tab {
+      text-align: left;
+      background: var(--surface-alt);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .step-tab:hover {
+      border-color: var(--greek-accent);
+    }
+
+    .step-tab.active {
+      background: var(--greek-bg);
+      border-color: var(--greek-accent);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .step-tab-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--greek-accent);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .step-tab-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .step-panel {
+      display: none;
+      background: var(--greek-bg);
+      border: 1px solid var(--greek-border);
+      border-radius: 12px;
+      padding: 1.35rem;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .step-panel.active {
+      display: block;
+    }
+
+    .step-nav-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.25rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--greek-border);
+    }
+
+    .btn-step {
+      background: var(--surface);
+      border: 1px solid var(--greek-border);
+      color: var(--greek-text);
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-step:hover:not(:disabled) {
+      background: var(--greek-accent);
+      color: #fff;
+    }
+
+    .btn-step:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Content Typography & Blocks */
+    p {
+      margin-bottom: 0.75rem;
+    }
+
+    ul.clean-list {
+      margin: 0.5rem 0 1rem 1.35rem;
+    }
+
+    ul.clean-list li {
+      margin-bottom: 0.35rem;
+    }
+
+    .highlight-word {
+      display: inline-block;
+      font-size: 1.3rem;
+      font-weight: 800;
+      padding: 0.25rem 0.75rem;
+      border-radius: 8px;
+      margin: 0.35rem 0 0.65rem;
+    }
+
+    .formula-box {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      margin: 0.65rem 0 1rem;
+      display: inline-block;
+    }
+
+    .zh-definition {
+      display: block;
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      margin: 0.75rem 0 1.15rem;
+    }
+
+    /* Example Cards */
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.9rem;
+      margin: 0.85rem 0 1.25rem;
+    }
+
+    .example-card {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .example-num-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    .example-en {
+      font-size: 0.96rem;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .example-zh {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    /* Remember Callout */
+    .remember-box {
+      border-left: 4px solid;
+      padding: 0.9rem 1.15rem;
+      border-radius: 0 10px 10px 0;
+      margin-top: 1.1rem;
+    }
+
+    .remember-box-title {
+      font-weight: 800;
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.25rem;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--surface-alt);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Section 7 Scenario Cards */
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.9rem;
+      margin: 1rem 0 1.25rem;
+    }
+
+    .scenario-card {
+      border-radius: 12px;
+      padding: 1rem;
+      border: 1px solid;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .scenario-caption {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.75);
+      padding: 0.45rem 0.6rem;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+      border: 1px dashed rgba(0, 0, 0, 0.12);
+    }
+
+    /* Section 8 Memory Map Diagram */
+    .memory-map {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .map-node-root {
+      display: inline-block;
+      background: var(--greek-bg);
+      border: 2px solid var(--greek-accent);
+      color: var(--greek-text);
+      padding: 0.85rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .map-arrow {
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      margin: 0.4rem 0;
+      font-weight: 700;
+    }
+
+    .map-branches {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+      gap: 0.85rem;
+      margin-top: 1rem;
+    }
+
+    .map-branch-card {
+      border-radius: 10px;
+      padding: 0.9rem;
+      border: 1px solid;
+    }
+
+    /* Quiz Section */
+    .quiz-scoreboard {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: #1e293b;
+      color: #fff;
+      padding: 1rem 1.35rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .score-display {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .score-badge {
+      background: #38bdf8;
+      color: #0f172a;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-left: 0.4rem;
+      font-weight: 800;
+    }
+
+    .quiz-part-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 1.5rem 0 0.85rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .quiz-item {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.15rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .quiz-item.correct {
+      border-color: var(--success);
+      background: var(--success-bg);
+    }
+
+    .quiz-item.incorrect {
+      border-color: var(--error);
+      background: var(--error-bg);
+    }
+
+    .quiz-q-text {
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .mcq-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.5rem;
+    }
+
+    .mcq-btn {
+      text-align: left;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.94rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text);
+    }
+
+    .mcq-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .mcq-btn.selected-correct {
+      background: var(--success);
+      color: #fff;
+      border-color: var(--success);
+      font-weight: 700;
+    }
+
+    .mcq-btn.selected-wrong {
+      background: var(--error);
+      color: #fff;
+      border-color: var(--error);
+      font-weight: 700;
+    }
+
+    .fill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .fill-input {
+      padding: 0.55rem 0.85rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.96rem;
+      min-width: 210px;
+      background: #fff;
+    }
+
+    .fill-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .btn-check {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .btn-check:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-reset {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-reset:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+
+    .feedback-msg {
+      margin-top: 0.65rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    .feedback-msg.show {
+      display: block;
+    }
+
+    .feedback-msg.ok { color: var(--success); }
+    .feedback-msg.bad { color: var(--error); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      .hero-card, .lesson-section {
+        padding: 1.25rem;
+      }
+      .hero-card h1 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-badge">WORD FAMILY</span>
+        <span class="brand-title">technique · technician · technical · technically</span>
+      </div>
+      <div class="controls-bar">
+        <button id="recallToggleBtn" class="recall-toggle" type="button" title="Hide definitions and Chinese translations to test yourself">
+          <span class="toggle-dot"></span>
+          <span>Recall / Study Mode: <strong id="recallStatusText">OFF</strong></span>
+        </button>
+      </div>
+    </div>
+    <nav class="section-nav" aria-label="Lesson navigation">
+      <div class="nav-inner">
+        <button class="nav-btn active" data-target="all">All Sections</button>
+        <button class="nav-btn" data-target="sec-1">1. Origin</button>
+        <button class="nav-btn" data-target="sec-2">2. Technical (adj.)</button>
+        <button class="nav-btn" data-target="sec-3">3. Technique (n.)</button>
+        <button class="nav-btn" data-target="sec-4">4. Technician (n.)</button>
+        <button class="nav-btn" data-target="sec-5">5. Technically (adv.)</button>
+        <button class="nav-btn" data-target="sec-6">6. Word Family</button>
+        <button class="nav-btn" data-target="sec-7">7. Don't Confuse</button>
+        <button class="nav-btn" data-target="sec-8">8. Memory Map</button>
+        <button class="nav-btn" data-target="sec-9">9. Quiz</button>
+        <button class="nav-btn" data-target="sec-10">10. Memorise</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Introduction -->
+    <div class="hero-card">
+      <h1>Let's learn technique, technician, technical and technically step by step.</h1>
+      <p>This word family is slightly different from the previous ones because the words are connected to the idea of skill, knowledge and the way we do something.</p>
+      <p>The most important thing to understand is their common origin: an Ancient Greek word meaning art, skill or craft.</p>
+    </div>
+
+    <!-- Section 1 -->
+    <section id="sec-1" class="lesson-section">
+      <div class="section-header">
+        <h2 class="section-title">1. Where do these words come from?</h2>
+        <span class="pos-pill pill-greek">Etymology · Ancient Greek</span>
+      </div>
+
+      <div class="timeline-tabs" role="tablist">
+        <button class="step-tab active" data-step="0" type="button">
+          <span class="step-tab-num">Stage 1</span>
+          <span class="step-tab-title">Step 1: Ancient Greek – tekhnē</span>
+        </button>
+        <button class="step-tab" data-step="1" type="button">
+          <span class="step-tab-num">Stage 2</span>
+          <span class="step-tab-title">Step 2: Ancient Greek – tekhnikos</span>
+        </button>
+        <button class="step-tab" data-step="2" type="button">
+          <span class="step-tab-num">Stage 3</span>
+          <span class="step-tab-title">Step 3: How did the words enter English?</span>
+        </button>
+      </div>
+
+      <!-- Step 1 Panel -->
+      <div class="step-panel active" data-step-panel="0">
+        <h3>Step 1: Ancient Greek – tekhnē</h3>
+        <p>Thousands of years ago, the Ancient Greeks used the word:</p>
+        <div class="highlight-word" style="background:#fff; color:var(--greek-text); border:1px solid var(--greek-border);">tekhnē</div>
+        <p>It meant:</p>
+        <ul class="clean-list">
+          <li>Art</li>
+          <li>Skill</li>
+          <li>Craft</li>
+          <li>The ability to do something well</li>
+        </ul>
+        <p>But what does this actually mean?</p>
+        <p>Imagine someone making a beautiful painting.</p>
+        <p>To create the painting, the person needs:</p>
+        <ul class="clean-list">
+          <li>Knowledge of colours.</li>
+          <li>The ability to use a paintbrush.</li>
+          <li>Skills to create different shapes and effects.</li>
+        </ul>
+        <p>All these abilities are part of the person's tekhnē.</p>
+        <p>In simple words:</p>
+        <p><strong><span class="recall-target">Tekhnē = The skill or knowledge needed to do something well.</span></strong></p>
+
+        <div class="step-nav-footer">
+          <button class="btn-step" disabled type="button">← Previous Step</button>
+          <span style="font-size:0.85rem; color:var(--greek-text); font-weight:600;">Stage 1 of 3</span>
+          <button class="btn-step" onclick="goStep(1)" type="button">Next: Step 2 →</button>
+        </div>
+      </div>
+
+      <!-- Step 2 Panel -->
+      <div class="step-panel" data-step-panel="1">
+        <h3>Step 2: Ancient Greek – tekhnikos</h3>
+        <p>Another word developed from tekhnē:</p>
+        <div class="highlight-word" style="background:#fff; color:var(--greek-text); border:1px solid var(--greek-border);">tekhnikos</div>
+        <p>It meant:</p>
+        <ul class="clean-list recall-target">
+          <li>Related to art or skill.</li>
+          <li>Having the knowledge or ability to do something.</li>
+          <li>Skilled or artistic.</li>
+        </ul>
+        <p>For example, someone who was good at making things or creating art could be described using this idea.</p>
+        <p>This word is important because it became the source of the English word technical.</p>
+
+        <div class="step-nav-footer">
+          <button class="btn-step" onclick="goStep(0)" type="button">← Previous: Step 1</button>
+          <span style="font-size:0.85rem; color:var(--greek-text); font-weight:600;">Stage 2 of 3</span>
+          <button class="btn-step" onclick="goStep(2)" type="button">Next: Step 3 →</button>
+        </div>
+      </div>
+
+      <!-- Step 3 Panel -->
+      <div class="step-panel" data-step-panel="2">
+        <h3>Step 3: How did the words enter English?</h3>
+        <p>Over time, words related to tekhnē developed into several English words.</p>
+        <p>They did not all enter English at the same time or through exactly the same route.</p>
+        <p>Let's look at them one by one.</p>
+
+        <div class="step-nav-footer">
+          <button class="btn-step" onclick="goStep(1)" type="button">← Previous: Step 2</button>
+          <span style="font-size:0.85rem; color:var(--greek-text); font-weight:600;">Stage 3 of 3</span>
+          <button class="btn-step" disabled type="button">End of Origin Stages</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="sec-2" class="lesson-section" style="border-top: 4px solid var(--adj-accent);">
+      <div class="section-header">
+        <h2 class="section-title">2. TECHNICAL – The Adjective</h2>
+        <span class="pos-pill pill-adj">Technical (adj.)</span>
+      </div>
+
+      <p>The word technical appeared in English in the 1610s.</p>
+      <p>It was formed from technic + -al, and was also influenced by the Latin form of the Greek word tekhnikos.</p>
+      <p>Its early meaning was:</p>
+      <ul class="clean-list">
+        <li>Having a particular skill or knowledge.</li>
+        <li>Skilled in a particular art or subject.</li>
+      </ul>
+      <p>Later, its meaning developed to describe things related to a particular profession, science or subject.</p>
+      <p>Today, technical commonly means:</p>
+      <ul class="clean-list recall-target">
+        <li>Related to a particular subject, profession or type of work.</li>
+        <li>Involving special knowledge or skills.</li>
+      </ul>
+      <span class="zh-definition recall-target" style="background:var(--adj-bg); color:var(--adj-text);">技術上的；專業的；與某個學科或行業有關的。</span>
+
+      <h3>Examples</h3>
+      <div class="examples-grid">
+        <div class="example-card">
+          <div class="example-num-title">1. Technical skills</div>
+          <p class="example-en">You need good technical skills to repair computers.</p>
+          <p class="example-zh recall-target">你需要良好的技術才能維修電腦。</p>
+        </div>
+        <div class="example-card">
+          <div class="example-num-title">2. Technical knowledge</div>
+          <p class="example-en">The students need more technical knowledge to understand how the machine works.</p>
+          <p class="example-zh recall-target">學生需要更多專業知識，才能理解這部機器如何運作。</p>
+        </div>
+        <div class="example-card">
+          <div class="example-num-title">3. Technical problem</div>
+          <p class="example-en">The online meeting was cancelled because of a technical problem.</p>
+          <p class="example-zh recall-target">網上會議因為技術問題而取消。</p>
+        </div>
+      </div>
+
+      <div class="remember-box" style="background:var(--adj-bg); border-color:var(--adj-accent);">
+        <div class="remember-box-title" style="color:var(--adj-text);">Remember:</div>
+        <p style="margin:0;"><span class="recall-target">Technical describes something that requires or relates to special knowledge or skills.</span></p>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="sec-3" class="lesson-section" style="border-top: 4px solid var(--noun-tech-accent);">
+      <div class="section-header">
+        <h2 class="section-title">3. TECHNIQUE – The Noun</h2>
+        <span class="pos-pill pill-noun-tech">Technique (n.)</span>
+      </div>
+
+      <p>Now let's look at another word from the same word family.</p>
+      <p>This word entered English in 1817 from French technique.</p>
+      <p>The French word was connected to the Greek tekhnikos, which came from tekhnē.</p>
+      <p>Its original meaning was related to the practical details of creating art or music.</p>
+      <p>Over time, its meaning became broader.</p>
+      <p>Today, it means:</p>
+      <ul class="clean-list recall-target">
+        <li>A particular way of doing something.</li>
+        <li>A special method or skill used to complete a task.</li>
+      </ul>
+      <span class="zh-definition recall-target" style="background:var(--noun-tech-bg); color:var(--noun-tech-text);">技巧；技術；方法。</span>
+
+      <p>Let's understand the difference between skill and technique.</p>
+      <p>Imagine two students are learning how to play the piano.</p>
+      <ul class="clean-list">
+        <li>One student has good piano skills.</li>
+        <li>The other student uses a special way of moving their fingers to play difficult music.</li>
+      </ul>
+      <p>The special way of moving their fingers is called a technique.</p>
+      <p>In simple words:</p>
+      <p><strong><span class="recall-target">Technique = A particular method or way of doing something well.</span></strong></p>
+
+      <h3>Examples</h3>
+      <div class="examples-grid">
+        <div class="example-card">
+          <div class="example-num-title">1. Swimming technique</div>
+          <p class="example-en">The coach taught the students a new swimming technique.</p>
+          <p class="example-zh recall-target">教練教學生一種新的游泳技巧。</p>
+        </div>
+        <div class="example-card">
+          <div class="example-num-title">2. Painting technique</div>
+          <p class="example-en">This artist uses a special painting technique.</p>
+          <p class="example-zh recall-target">這位藝術家使用一種特別的繪畫技巧。</p>
+        </div>
+        <div class="example-card">
+          <div class="example-num-title">3. Study technique</div>
+          <p class="example-en">Everyone has a different study technique.</p>
+          <p class="example-zh recall-target">每個人都有不同的學習方法。</p>
+        </div>
+      </div>
+
+      <div class="remember-box" style="background:var(--noun-tech-bg); border-color:var(--noun-tech-accent);">
+        <div class="remember-box-title" style="color:var(--noun-tech-text);">Remember:</div>
+        <p style="margin:0;"><span class="recall-target">Technique is a noun. It refers to the method or skill used to do something.</span></p>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="sec-4" class="lesson-section" style="border-top: 4px solid var(--noun-person-accent);">
+      <div class="section-header">
+        <h2 class="section-title">4. TECHNICIAN – The Noun</h2>
+        <span class="pos-pill pill-noun-person">Technician (n.)</span>
+      </div>
+
+      <p>Now let's look at a word that describes a person.</p>
+      <p>This word appeared in English in 1833.</p>
+      <p>It was formed from:</p>
+      <div class="formula-box" style="background:var(--noun-person-bg); color:var(--noun-person-text); border:1px solid var(--noun-person-border);">Technic + -ian</div>
+      <p>The suffix -ian is often used to describe a person who has a particular job, skill or area of knowledge.</p>
+      <p>For example:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Word</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Musician</strong></td>
+              <td><span class="recall-target">A person who plays or creates music</span></td>
+            </tr>
+            <tr>
+              <td><strong>Historian</strong></td>
+              <td><span class="recall-target">A person who studies history</span></td>
+            </tr>
+            <tr>
+              <td><strong>Technician</strong></td>
+              <td><span class="recall-target">A person who has special technical skills</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Originally, technician referred to someone who was an expert in the technical details of a subject.</p>
+      <p>By 1939, it was also commonly used to describe someone skilled in practical or mechanical work.</p>
+      <p>Today:</p>
+      <p><strong>Technician (n.) = <span class="recall-target">A person who has special technical skills and knowledge, especially someone who works with machines or equipment.</span></strong></p>
+      <span class="zh-definition recall-target" style="background:var(--noun-person-bg); color:var(--noun-person-text);">技術人員；技師。</span>
+
+      <h3>Examples</h3>
+      <div class="examples-grid">
+        <div class="example-card">
+          <div class="example-num-title">1. Computer technician</div>
+          <p class="example-en">The computer technician helped me repair my laptop.</p>
+          <p class="example-zh recall-target">電腦技術人員幫我維修手提電腦。</p>
+        </div>
+        <div class="example-card">
+          <div class="example-num-title">2. Laboratory technician</div>
+          <p class="example-en">The laboratory technician checked the samples carefully.</p>
+          <p class="example-zh recall-target">實驗室技術人員仔細檢查了樣本。</p>
+        </div>
+        <div class="example-card">
+          <div class="example-num-title">3. Electrical technician</div>
+          <p class="example-en">We called an electrical technician to fix the broken machine.</p>
+          <p class="example-zh recall-target">我們請了一位電機技術人員來修理故障的機器。</p>
+        </div>
+      </div>
+
+      <div class="remember-box" style="background:var(--noun-person-bg); border-color:var(--noun-person-accent);">
+        <div class="remember-box-title" style="color:var(--noun-person-text);">Remember:</div>
+        <p style="margin:0;"><span class="recall-target">Technician = A person who has special technical skills.</span></p>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="sec-5" class="lesson-section" style="border-top: 4px solid var(--adv-accent);">
+      <div class="section-header">
+        <h2 class="section-title">5. TECHNICALLY – The Adverb</h2>
+        <span class="pos-pill pill-adv">Technically (adv.)</span>
+      </div>
+
+      <p>Now we have reached the word you originally wanted to learn!</p>
+      <p>This word is formed by:</p>
+      <div class="formula-box" style="background:var(--adv-bg); color:var(--adv-text); border:1px solid var(--adv-border);">TECHNICAL + -LY = TECHNICALLY</div>
+      <p>The suffix -ly is commonly added to adjectives to form adverbs.</p>
+      <p>Its meaning is:</p>
+      <ul class="clean-list recall-target">
+        <li>In a technical manner.</li>
+        <li>According to the exact rules or meaning of a particular subject or profession.</li>
+      </ul>
+      <span class="zh-definition recall-target" style="background:var(--adv-bg); color:var(--adv-text);">技術上；嚴格來說；按照專業定義。</span>
+
+      <div class="examples-grid">
+        <div class="example-card">
+          <div class="example-num-title">Meaning 1: In a technical manner</div>
+          <p>It describes how something is done using special knowledge or skills.</p>
+          <p class="example-en"><strong>Example:</strong><br>The machine was technically designed to work in extreme temperatures.</p>
+          <p class="example-zh recall-target">這部機器在技術設計上能夠在極端溫度下運作。</p>
+        </div>
+        <div class="example-card">
+          <div class="example-num-title">Meaning 2: According to the exact rules or facts</div>
+          <p>Sometimes, technically is used when something is correct according to the rules or exact meaning of a word, even if people might understand it differently in everyday life.</p>
+          <p class="example-en"><strong>Example:</strong><br>Technically, a tomato is a fruit, not a vegetable.</p>
+          <p class="example-zh recall-target">嚴格來說，番茄是水果，而不是蔬菜。</p>
+          <p style="margin-top:0.5rem;"><strong>Why?</strong><br>Because according to its botanical classification, a tomato is a fruit.<br>However, people often treat it as a vegetable when cooking.<br>This is why we use technically here: we are talking about what is correct according to a specific definition.</p>
+        </div>
+      </div>
+
+      <div class="remember-box" style="background:var(--adv-bg); border-color:var(--adv-accent);">
+        <div class="remember-box-title" style="color:var(--adv-text);">Remember:</div>
+        <p style="margin:0;"><span class="recall-target">Technically = According to the exact rules, facts or professional meaning of something.</span></p>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="sec-6" class="lesson-section">
+      <div class="section-header">
+        <h2 class="section-title">6. Understanding the Complete Word Family</h2>
+        <span class="pos-pill pill-greek">Overview &amp; Comparison</span>
+      </div>
+
+      <p>Let's put everything together.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Word</th>
+              <th>Part of Speech</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:var(--noun-tech-bg);">
+              <td><strong>technique</strong></td>
+              <td>Noun (n.)</td>
+              <td><span class="recall-target">A particular method or way of doing something</span></td>
+            </tr>
+            <tr style="background:var(--noun-person-bg);">
+              <td><strong>technician</strong></td>
+              <td>Noun (n.)</td>
+              <td><span class="recall-target">A person with special technical skills</span></td>
+            </tr>
+            <tr style="background:var(--adj-bg);">
+              <td><strong>technical</strong></td>
+              <td>Adjective (adj.)</td>
+              <td><span class="recall-target">Related to special knowledge, skills or a profession</span></td>
+            </tr>
+            <tr style="background:var(--adv-bg);">
+              <td><strong>technically</strong></td>
+              <td>Adverb (adv.)</td>
+              <td><span class="recall-target">In a technical manner; according to exact rules or facts</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Compare these four sentences</h3>
+      <div class="examples-grid">
+        <div class="example-card" style="border-left:4px solid var(--noun-tech-accent);">
+          <div class="example-num-title">1. Technique (n.)</div>
+          <p class="example-en">The swimming coach taught us a new technique.</p>
+          <p class="example-zh recall-target">游泳教練教了我們一種新的游泳技巧。</p>
+        </div>
+        <div class="example-card" style="border-left:4px solid var(--noun-person-accent);">
+          <div class="example-num-title">2. Technician (n.)</div>
+          <p class="example-en">The technician repaired the broken computer.</p>
+          <p class="example-zh recall-target">技術人員修理了故障的電腦。</p>
+        </div>
+        <div class="example-card" style="border-left:4px solid var(--adj-accent);">
+          <div class="example-num-title">3. Technical (adj.)</div>
+          <p class="example-en">You need technical knowledge to operate this machine.</p>
+          <p class="example-zh recall-target">你需要專業知識才能操作這部機器。</p>
+        </div>
+        <div class="example-card" style="border-left:4px solid var(--adv-accent);">
+          <div class="example-num-title">4. Technically (adv.)</div>
+          <p class="example-en">Technically, the answer is correct.</p>
+          <p class="example-zh recall-target">嚴格來說，這個答案是正確的。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7 -->
+    <section id="sec-7" class="lesson-section">
+      <div class="section-header">
+        <h2 class="section-title">7. Don't Confuse These Words!</h2>
+        <span class="pos-pill pill-greek">Practical Scenario</span>
+      </div>
+
+      <p>Although these words come from the same origin, they have different meanings.</p>
+      <p>Let's use one simple situation to understand them.</p>
+      <p><strong>Imagine you want to repair a computer.</strong></p>
+
+      <div class="scenario-grid">
+        <div class="scenario-card" style="background:var(--noun-person-bg); border-color:var(--noun-person-border);">
+          <div class="scenario-caption">Course for Laptop Repair Technicians Certificate | Free &amp; Fast Course</div>
+          <div>
+            <h4 style="color:var(--noun-person-text); margin-bottom:0.35rem;">Technician (n.)</h4>
+            <p class="recall-target">The person who repairs your computer.</p>
+            <p class="example-zh recall-target" style="margin:0;">負責維修電腦的人。</p>
+          </div>
+        </div>
+
+        <div class="scenario-card" style="background:var(--noun-tech-bg); border-color:var(--noun-tech-border);">
+          <div class="scenario-caption">Las Mejores Prácticas para Cuidar la Batería de tu Laptop en época de calor</div>
+          <div>
+            <h4 style="color:var(--noun-tech-text); margin-bottom:0.35rem;">Technique (n.)</h4>
+            <p class="recall-target">The method used to repair the computer.</p>
+            <p class="example-zh recall-target" style="margin:0;">維修電腦時使用的方法或技巧。</p>
+          </div>
+        </div>
+
+        <div class="scenario-card" style="background:var(--adj-bg); border-color:var(--adj-border);">
+          <div class="scenario-caption">Abstract,close up of Mainboard Electronic computer background. (logic board,cpu motherboard,Main board,system board,mobo)</div>
+          <div>
+            <h4 style="color:var(--adj-text); margin-bottom:0.35rem;">Technical (adj.)</h4>
+            <p class="recall-target">The special knowledge needed to repair the computer.</p>
+            <p class="example-zh recall-target" style="margin:0;">維修電腦所需要的專業知識。</p>
+          </div>
+        </div>
+
+        <div class="scenario-card" style="background:var(--adv-bg); border-color:var(--adv-border);">
+          <div class="scenario-caption">Clinica de Ordenadores</div>
+          <div>
+            <h4 style="color:var(--adv-text); margin-bottom:0.35rem;">Technically (adv.)</h4>
+            <p class="recall-target">Describes something according to technical knowledge or exact rules.</p>
+            <p class="example-zh recall-target" style="margin:0;">從技術角度來說；按照專業標準。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="remember-box" style="background:var(--surface-alt); border-color:var(--primary);">
+        <div class="remember-box-title" style="color:var(--primary);">The easiest way to remember them:</div>
+        <ul class="clean-list" style="margin-bottom:0;">
+          <li><strong>Technique</strong> = <span class="recall-target">Method</span></li>
+          <li><strong>Technician</strong> = <span class="recall-target">Person</span></li>
+          <li><strong>Technical</strong> = <span class="recall-target">Related to special skills or knowledge</span></li>
+          <li><strong>Technically</strong> = <span class="recall-target">In a technical way / According to exact rules</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 8 -->
+    <section id="sec-8" class="lesson-section">
+      <div class="section-header">
+        <h2 class="section-title">8. Memory Map – Remember the Origin and Word Forms</h2>
+        <span class="pos-pill pill-greek">Visual Family Tree</span>
+      </div>
+
+      <div class="memory-map">
+        <p style="font-weight:700; color:var(--text-muted); margin-bottom:0.65rem;">The origin</p>
+        <div class="map-node-root">
+          <div style="font-size:1.25rem; font-weight:800;">TEKHNĒ</div>
+          <div style="font-size:0.85rem;">Ancient Greek</div>
+          <div style="font-size:0.9rem; margin-top:0.2rem;">Art · Skill · Craft</div>
+        </div>
+        <div class="map-arrow">↓</div>
+        <div class="map-node-root" style="background:#fff;">
+          <div style="font-size:1.15rem; font-weight:800;">TEKHNIKOS</div>
+          <div style="font-size:0.9rem;">Related to art, skill or craft</div>
+        </div>
+        <div class="map-arrow">↓</div>
+        <p style="font-weight:700; color:var(--text-muted); margin-top:0.35rem;">Related English words</p>
+
+        <div class="map-branches">
+          <div class="map-branch-card" style="background:var(--noun-tech-bg); border-color:var(--noun-tech-border); color:var(--noun-tech-text);">
+            <div style="font-weight:800; font-size:1.05rem;">TECHNIQUE</div>
+            <div style="font-size:0.82rem; font-weight:700; opacity:0.85;">Noun</div>
+            <div style="margin-top:0.3rem;"><span class="recall-target">Method or skill</span></div>
+          </div>
+
+          <div class="map-branch-card" style="background:var(--noun-person-bg); border-color:var(--noun-person-border); color:var(--noun-person-text);">
+            <div style="font-weight:800; font-size:1.05rem;">TECHNICIAN</div>
+            <div style="font-size:0.82rem; font-weight:700; opacity:0.85;">Noun</div>
+            <div style="margin-top:0.3rem;"><span class="recall-target">Skilled person</span></div>
+          </div>
+
+          <div class="map-branch-card" style="background:var(--adj-bg); border-color:var(--adj-border); color:var(--adj-text);">
+            <div style="font-weight:800; font-size:1.05rem;">TECHNICAL</div>
+            <div style="font-size:0.82rem; font-weight:700; opacity:0.85;">Adjective</div>
+            <div style="margin-top:0.3rem;"><span class="recall-target">Related to special skills</span></div>
+          </div>
+
+          <div class="map-branch-card" style="background:var(--adv-bg); border-color:var(--adv-border); color:var(--adv-text);">
+            <div style="font-weight:800; font-size:1.05rem;">TECHNICALLY</div>
+            <div style="font-size:0.82rem; font-weight:700; opacity:0.85;">Adverb</div>
+            <div style="margin-top:0.3rem;"><span class="recall-target">In a technical way</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 9 -->
+    <section id="sec-9" class="lesson-section">
+      <div class="section-header">
+        <h2 class="section-title">9. Test Your Understanding</h2>
+        <span class="pos-pill pill-greek">Interactive Practice</span>
+      </div>
+
+      <p>Try these questions to check whether you understand the meanings and spelling of these words.</p>
+
+      <div class="quiz-scoreboard">
+        <div class="score-display">
+          Score Tracker: <span class="score-badge" id="scoreBadge">0 / 11</span>
+          <span id="answeredCount" style="font-size:0.88rem; font-weight:400; color:#cbd5e1; margin-left:0.6rem;">(0 answered)</span>
+        </div>
+        <button type="button" class="btn-reset" id="resetQuizBtn">Reset All Answers</button>
+      </div>
+
+      <!-- Part A -->
+      <div class="quiz-part-title">Part A – Choose the correct answer</div>
+
+      <div class="quiz-item" data-qid="q1" data-type="mcq" data-answer="B">
+        <div class="quiz-q-text">1. The computer __________ helped me fix my broken laptop.</div>
+        <div class="mcq-options">
+          <button type="button" class="mcq-btn" data-opt="A">A. technique</button>
+          <button type="button" class="mcq-btn" data-opt="B">B. technician</button>
+          <button type="button" class="mcq-btn" data-opt="C">C. technical</button>
+          <button type="button" class="mcq-btn" data-opt="D">D. technically</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <div class="quiz-item" data-qid="q2" data-type="mcq" data-answer="C">
+        <div class="quiz-q-text">2. The swimming coach taught us a new swimming __________.</div>
+        <div class="mcq-options">
+          <button type="button" class="mcq-btn" data-opt="A">A. technician</button>
+          <button type="button" class="mcq-btn" data-opt="B">B. technical</button>
+          <button type="button" class="mcq-btn" data-opt="C">C. technique</button>
+          <button type="button" class="mcq-btn" data-opt="D">D. technically</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <div class="quiz-item" data-qid="q3" data-type="mcq" data-answer="C">
+        <div class="quiz-q-text">3. You need special __________ knowledge to repair this machine.</div>
+        <div class="mcq-options">
+          <button type="button" class="mcq-btn" data-opt="A">A. technique</button>
+          <button type="button" class="mcq-btn" data-opt="B">B. technician</button>
+          <button type="button" class="mcq-btn" data-opt="C">C. technical</button>
+          <button type="button" class="mcq-btn" data-opt="D">D. technically</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <div class="quiz-item" data-qid="q4" data-type="mcq" data-answer="D">
+        <div class="quiz-q-text">4. __________, a whale is a mammal, not a fish.</div>
+        <div class="mcq-options">
+          <button type="button" class="mcq-btn" data-opt="A">A. Technical</button>
+          <button type="button" class="mcq-btn" data-opt="B">B. Technician</button>
+          <button type="button" class="mcq-btn" data-opt="C">C. Technique</button>
+          <button type="button" class="mcq-btn" data-opt="D">D. Technically</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <!-- Part B -->
+      <div class="quiz-part-title">Part B – Word Formation</div>
+      <p>Complete the sentences using the correct form of the word family.</p>
+
+      <div class="quiz-item" data-qid="q5" data-type="fill" data-answer="technician">
+        <div class="quiz-q-text">5. The __________ checked the machine carefully before using it.</div>
+        <div class="fill-row">
+          <input type="text" class="fill-input" placeholder="Type your answer..." aria-label="Question 5 answer" />
+          <button type="button" class="btn-check">Check Answer</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <div class="quiz-item" data-qid="q6" data-type="fill" data-answer="technique">
+        <div class="quiz-q-text">6. The artist used a special painting __________ to create the beautiful picture.</div>
+        <div class="fill-row">
+          <input type="text" class="fill-input" placeholder="Type your answer..." aria-label="Question 6 answer" />
+          <button type="button" class="btn-check">Check Answer</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <div class="quiz-item" data-qid="q7" data-type="fill" data-answer="technical">
+        <div class="quiz-q-text">7. Students need to develop their __________ skills before they can operate the equipment.</div>
+        <div class="fill-row">
+          <input type="text" class="fill-input" placeholder="Type your answer..." aria-label="Question 7 answer" />
+          <button type="button" class="btn-check">Check Answer</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <div class="quiz-item" data-qid="q8" data-type="fill" data-answer="technically">
+        <div class="quiz-q-text">8. __________, the two answers are both correct according to the rules.</div>
+        <div class="fill-row">
+          <input type="text" class="fill-input" placeholder="Type your answer..." aria-label="Question 8 answer" />
+          <button type="button" class="btn-check">Check Answer</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <!-- Part C -->
+      <div class="quiz-part-title">Part C – Understanding the Origin</div>
+
+      <div class="quiz-item" data-qid="q9" data-type="mcq" data-answer="B">
+        <div class="quiz-q-text">9. What did the Ancient Greek word tekhnē mean?</div>
+        <div class="mcq-options">
+          <button type="button" class="mcq-btn" data-opt="A">A. Knowledge and science only.</button>
+          <button type="button" class="mcq-btn" data-opt="B">B. Art, skill or craft.</button>
+          <button type="button" class="mcq-btn" data-opt="C">C. Machines and computers.</button>
+          <button type="button" class="mcq-btn" data-opt="D">D. Rules and regulations.</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <div class="quiz-item" data-qid="q10" data-type="mcq" data-answer="C">
+        <div class="quiz-q-text">10. Which word describes a person who has special technical skills?</div>
+        <div class="mcq-options">
+          <button type="button" class="mcq-btn" data-opt="A">A. Technique.</button>
+          <button type="button" class="mcq-btn" data-opt="B">B. Technical.</button>
+          <button type="button" class="mcq-btn" data-opt="C">C. Technician.</button>
+          <button type="button" class="mcq-btn" data-opt="D">D. Technically.</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <div class="quiz-item" data-qid="q11" data-type="mcq" data-answer="C">
+        <div class="quiz-q-text">11. What does the suffix -ly usually do when added to an adjective?</div>
+        <div class="mcq-options">
+          <button type="button" class="mcq-btn" data-opt="A">A. Changes it into a noun.</button>
+          <button type="button" class="mcq-btn" data-opt="B">B. Changes it into a verb.</button>
+          <button type="button" class="mcq-btn" data-opt="C">C. Changes it into an adverb.</button>
+          <button type="button" class="mcq-btn" data-opt="D">D. Changes it into another adjective.</button>
+        </div>
+        <div class="feedback-msg"></div>
+      </div>
+    </section>
+
+    <!-- Section 10 -->
+    <section id="sec-10" class="lesson-section">
+      <div class="section-header">
+        <h2 class="section-title">10. What You Should Memorise</h2>
+        <span class="pos-pill pill-greek">Summary Reference</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Information</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Main idea</strong></td>
+              <td><span class="recall-target">Skill, art and craft</span></td>
+            </tr>
+            <tr>
+              <td><strong>Origin</strong></td>
+              <td><span class="recall-target">Ancient Greek tekhē (properly written tekhnē)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Technique (n.)</strong></td>
+              <td><span class="recall-target">A particular method or skill</span></td>
+            </tr>
+            <tr>
+              <td><strong>Technician (n.)</strong></td>
+              <td><span class="recall-target">A person with special technical skills</span></td>
+            </tr>
+            <tr>
+              <td><strong>Technical (adj.)</strong></td>
+              <td><span class="recall-target">Related to special skills or knowledge</span></td>
+            </tr>
+            <tr>
+              <td><strong>Technically (adv.)</strong></td>
+              <td><span class="recall-target">In a technical manner; according to exact rules</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Three important things to remember</h3>
+      <ol style="margin: 0.65rem 0 1.25rem 1.4rem;">
+        <li style="margin-bottom:0.5rem;"><strong>Origin:</strong> These words are connected to the Ancient Greek word tekhnē, meaning art, skill or craft.</li>
+        <li style="margin-bottom:0.5rem;"><strong>Word formation:</strong> Technical + -ly = technically. The suffix -ly changes the adjective into an adverb.</li>
+        <li style="margin-bottom:0.5rem;"><strong>Word meanings:</strong>
+          <ul class="clean-list" style="margin-top:0.3rem;">
+            <li><strong>Technique</strong> = <span class="recall-target">Method or skill.</span></li>
+            <li><strong>Technician</strong> = <span class="recall-target">Person.</span></li>
+            <li><strong>Technical</strong> = <span class="recall-target">Related to special skills or knowledge.</span></li>
+            <li><strong>Technically</strong> = <span class="recall-target">In a technical way or according to exact rules.</span></li>
+          </ul>
+        </li>
+      </ol>
+
+      <div class="remember-box" style="background:var(--primary-light); border-color:var(--primary);">
+        <div class="remember-box-title" style="color:var(--primary);">A final memory trick:</div>
+        <p>Imagine you are learning to repair a computer:</p>
+        <ul class="clean-list">
+          <li>The <strong>technician</strong> is the person.</li>
+          <li>The <strong>technique</strong> is the method.</li>
+          <li>The <strong>technical</strong> knowledge is what the person needs.</li>
+          <li><strong>Technically</strong>, the computer is working correctly.</li>
+        </ul>
+        <p style="margin-bottom:0;">If you can remember this one situation, you can understand the differences between all four words!</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // 1. Recall / Study Mode Toggle & Individual Reveal
+    const recallToggleBtn = document.getElementById("recallToggleBtn");
+    const recallStatusText = document.getElementById("recallStatusText");
+    const recallTargets = document.querySelectorAll(".recall-target");
+
+    recallToggleBtn.addEventListener("click", () => {
+      const isActive = document.body.classList.toggle("recall-mode");
+      recallToggleBtn.classList.toggle("active", isActive);
+      recallStatusText.textContent = isActive ? "ON" : "OFF";
+      if (!isActive) {
+        recallTargets.forEach(el => el.classList.remove("revealed"));
+      }
+    });
+
+    recallTargets.forEach(el => {
+      el.addEventListener("click", () => {
+        if (document.body.classList.contains("recall-mode")) {
+          el.classList.toggle("revealed");
+        }
+      });
+    });
+
+    // 2. Section Navigation / Tab Filter
+    const navBtns = document.querySelectorAll(".nav-btn");
+    const sections = document.querySelectorAll(".lesson-section");
+    const heroCard = document.querySelector(".hero-card");
+
+    navBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        navBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const target = btn.dataset.target;
+
+        if (target === "all") {
+          heroCard.style.display = "block";
+          sections.forEach(sec => sec.classList.remove("hidden-by-filter"));
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          heroCard.style.display = "none";
+          sections.forEach(sec => {
+            if (sec.id === target) {
+              sec.classList.remove("hidden-by-filter");
+            } else {
+              sec.classList.add("hidden-by-filter");
+            }
+          });
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+    });
+
+    // 3. Interactive Stepper in Section 1
+    const stepTabs = document.querySelectorAll(".step-tab");
+    const stepPanels = document.querySelectorAll(".step-panel");
+
+    function goStep(index) {
+      stepTabs.forEach((tab, i) => tab.classList.toggle("active", i === index));
+      stepPanels.forEach((panel, i) => panel.classList.toggle("active", i === index));
+    }
+
+    stepTabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        goStep(Number(tab.dataset.step));
+      });
+    });
+
+    // 4. Interactive Quiz & Score Tracker
+    const quizItems = document.querySelectorAll(".quiz-item");
+    const scoreBadge = document.getElementById("scoreBadge");
+    const answeredCountEl = document.getElementById("answeredCount");
+    const resetQuizBtn = document.getElementById("resetQuizBtn");
+    const quizState = {}; // qid -> boolean (isCorrect)
+
+    function updateScoreboard() {
+      const total = quizItems.length;
+      const answered = Object.keys(quizState).length;
+      const correct = Object.values(quizState).filter(Boolean).length;
+      scoreBadge.textContent = `${correct} / ${total}`;
+      answeredCountEl.textContent = `(${answered} answered)`;
+    }
+
+    quizItems.forEach(item => {
+      const qid = item.dataset.qid;
+      const type = item.dataset.type;
+      const correctAnswer = item.dataset.answer;
+      const feedbackEl = item.querySelector(".feedback-msg");
+
+      if (type === "mcq") {
+        const btns = item.querySelectorAll(".mcq-btn");
+        btns.forEach(btn => {
+          btn.addEventListener("click", () => {
+            const chosen = btn.dataset.opt;
+            btns.forEach(b => b.classList.remove("selected-correct", "selected-wrong"));
+
+            if (chosen === correctAnswer) {
+              btn.classList.add("selected-correct");
+              item.classList.remove("incorrect");
+              item.classList.add("correct");
+              feedbackEl.textContent = `Correct! The answer is ${correctAnswer}.`;
+              feedbackEl.className = "feedback-msg show ok";
+              quizState[qid] = true;
+            } else {
+              btn.classList.add("selected-wrong");
+              item.classList.remove("correct");
+              item.classList.add("incorrect");
+              feedbackEl.textContent = `Not quite. Try again or review the word meanings above.`;
+              feedbackEl.className = "feedback-msg show bad";
+              quizState[qid] = false;
+            }
+            updateScoreboard();
+          });
+        });
+      } else if (type === "fill") {
+        const input = item.querySelector(".fill-input");
+        const checkBtn = item.querySelector(".btn-check");
+
+        const evaluateFill = () => {
+          const userVal = input.value.trim().toLowerCase();
+          if (!userVal) {
+            feedbackEl.textContent = "Please type a word before checking.";
+            feedbackEl.className = "feedback-msg show bad";
+            return;
+          }
+          if (userVal === correctAnswer.toLowerCase()) {
+            item.classList.remove("incorrect");
+            item.classList.add("correct");
+            feedbackEl.textContent = `Correct! "${item.dataset.qid === "q8" ? "Technically" : correctAnswer}" fits the sentence.`;
+            feedbackEl.className = "feedback-msg show ok";
+            quizState[qid] = true;
+          } else {
+            item.classList.remove("correct");
+            item.classList.add("incorrect");
+            feedbackEl.textContent = `Incorrect. Check spelling and part of speech (technique, technician, technical, or technically).`;
+            feedbackEl.className = "feedback-msg show bad";
+            quizState[qid] = false;
+          }
+          updateScoreboard();
+        };
+
+        checkBtn.addEventListener("click", evaluateFill);
+        input.addEventListener("keydown", e => {
+          if (e.key === "Enter") evaluateFill();
+        });
+      }
+    });
+
+    resetQuizBtn.addEventListener("click", () => {
+      for (const key in quizState) {
+        delete quizState[key];
+      }
+      quizItems.forEach(item => {
+        item.classList.remove("correct", "incorrect");
+        const feedbackEl = item.querySelector(".feedback-msg");
+        feedbackEl.className = "feedback-msg";
+        feedbackEl.textContent = "";
+        item.querySelectorAll(".mcq-btn").forEach(b => b.classList.remove("selected-correct", "selected-wrong"));
+        const input = item.querySelector(".fill-input");
+        if (input) input.value = "";
+      });
+      updateScoreboard();
+    });
+  </script>
+</body>
+</html>
